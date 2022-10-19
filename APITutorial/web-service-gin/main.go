@@ -1,9 +1,11 @@
 package main
 
 import (
+	_ "fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // role representa informação da pessoa correspondente
@@ -25,6 +27,9 @@ var roles = []role{
 }
 
 func main() {
+	//for key, element := range employee {
+	//fmt.Println("Key:", key, "=>", "Element:", element)
+	//}
 	router := gin.Default()
 	router.GET("/roles", getRoles)
 	router.POST("/roles", postRoles)
