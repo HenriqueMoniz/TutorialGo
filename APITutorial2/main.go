@@ -2,11 +2,14 @@ package main
 
 import (
 	"database/sql"
+	"example/web-service-gin/docs"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type role struct {
@@ -63,7 +66,21 @@ func main() {
 		}
 		defer insert.Close()
 
+		r := gin.Default()
+		docs.SwaggerInfo.BasePath = "/api/v1"
+		v1 := r.Group("/api/v1")
+		{
+			eg := v1.Group("/example")
+			{
+				eg.GET("/helloworld", getRoles)
+			}
+		}
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		r.Run(":8080")
+
 	}
+
+	//Routes para os pedidos HTTP
 	router := gin.Default()
 	router.GET("/roles", getRoles)
 	router.POST("/roles", postRoles)
@@ -74,7 +91,41 @@ func main() {
 
 }
 func getRoles(c *gin.Context) {
+
 	c.IndentedJSON(http.StatusOK, roles)
+	//abre base de dados
+	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
+
+	//Verifica que não ocorreram erros
+	if err != nil {
+		panic(err.Error())
+	}
+
+	//Adia o fecho da base de dades até a função terminar
+	defer db.Close()
+
+	//Vai buscar todas as linhas da tabela
+	results, err := db.Query("SELECT * FROM test")
+
+	//Verifica se existem erros
+	if err != nil {
+		panic(err.Error())
+	}
+
+	//Vai linha a linha na tabela sql e dá print de cada uma
+	for results.Next() {
+		var test role
+		err = results.Scan(&test.ID, &test.Name, &test.Role)
+
+		//Verifica novamente se tem algum erro
+		if err != nil {
+			panic(err.Error())
+		}
+
+		fmt.Println(test.ID, test.Name, test.Role)
+	}
+
+	defer results.Close()
 }
 
 // postRoles adiciona um certo json aos roles
@@ -84,24 +135,36 @@ func postRoles(c *gin.Context) {
 	if err := c.BindJSON(&newRole); err != nil {
 		return
 	}
-	fmt.Println("IN POST BEFORE JSON PRINT")
-	fmt.Println(newRole)
-	fmt.Println("IN POST AFTER JSONPRINT")
+
+	/*fmt.Println("IN POST BEFORE JSON PRINT")
+	/*fmt.Println(newRole.ID)
+	fmt.Println(newRole.Name)
+	fmt.Println(newRole.Role)
+	fmt.Println("IN POST AFTER JSONPRINT")*/
+
+	//Abre a base de dados
 	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
+
+	//Verifica erros
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println("IN POST AFTER OPEN")
+
+	//Adia o fecho até terminar a função
 	defer db.Close()
-	/*insert, err := db.Query("INSERT INTO test VALUES ( '" + roles[i].ID + "','" + roles[i].Name + "','" + roles[i].Role + "')")
+
+	//Insere os valores do post na base de dados
+	insert, err := db.Query("INSERT INTO test VALUES ( '" + newRole.ID + "','" + newRole.Name + "','" + newRole.Role + "')")
 
 	//Verifica se existem erros
 	if err != nil {
 		panic(err.Error())
 	}
 
-	defer insert.Close()*/
-	// Adiciona o novo role á lista
+	//Adia o fecho até o fim da função
+	defer insert.Close()
+
+	// Adiciona o novo role á lista neste ficheiro
 	roles = append(roles, newRole)
 	c.IndentedJSON(http.StatusCreated, newRole)
 }
