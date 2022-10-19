@@ -3,8 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
-	_ "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -29,8 +30,7 @@ var roles = []role{
 // make it so the above is only to enter the db, do inserts for db, add post requests and change it into another thing like above
 func main() {
 	//Este ficheiro abre a base de dados mySQL, apaga todas as linhas existentes de modo a poder
-	//
-	//
+
 	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
 
 	// Caso tenha algum erro
@@ -64,7 +64,44 @@ func main() {
 		defer insert.Close()
 
 	}
+	router := gin.Default()
+	router.GET("/roles", getRoles)
+	router.POST("/roles", postRoles)
+
+	router.Run("localhost:8080")
 
 	fmt.Println("End of File")
 
+}
+func getRoles(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, roles)
+}
+
+// postRoles adiciona um certo json aos roles
+func postRoles(c *gin.Context) {
+	var newRole role
+
+	if err := c.BindJSON(&newRole); err != nil {
+		return
+	}
+	fmt.Println("IN POST BEFORE JSON PRINT")
+	fmt.Println(newRole)
+	fmt.Println("IN POST AFTER JSONPRINT")
+	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("IN POST AFTER OPEN")
+	defer db.Close()
+	/*insert, err := db.Query("INSERT INTO test VALUES ( '" + roles[i].ID + "','" + roles[i].Name + "','" + roles[i].Role + "')")
+
+	//Verifica se existem erros
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer insert.Close()*/
+	// Adiciona o novo role á lista
+	roles = append(roles, newRole)
+	c.IndentedJSON(http.StatusCreated, newRole)
 }
