@@ -82,6 +82,7 @@ func main() {
 
 	//Routes para os pedidos HTTP
 	router := gin.Default()
+
 	router.GET("/roles", getRoles)
 	router.POST("/roles", postRoles)
 
@@ -90,6 +91,7 @@ func main() {
 	fmt.Println("End of File")
 
 }
+
 func getRoles(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, roles)
