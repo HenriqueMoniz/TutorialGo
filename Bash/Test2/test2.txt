@@ -1,0 +1,7 @@
+Ficheiro 2 que irá ser utilizado para concatenar com o ficheiro3,  
+
+Pode-se pesquisar palavras num ficheiro utilizando o grep "palavra" "ficheiro"
+Caso quisermos contar palavras podemos fazer grep "palavra" "ficheiro" | wc  (-w, -m), -w dá palavras, -m dá
+caracters
+
+outro exemplo em vez de wc pode-se usar sort para dar sort

@@ -1,0 +1,7 @@
+ficheiro 3 que irá ser concatenado com o 2
+
+Método cat "ficheiro1" "fichheiro2"
+Less mostra os ficheiros numa janela nova
+
+man mostra um manual de apoio aos comandos
+
