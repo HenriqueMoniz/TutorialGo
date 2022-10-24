@@ -9,6 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 )
 
 var tokn = []byte("tokenvalue")
@@ -71,27 +72,10 @@ func main() {
 	}
 
 	router := gin.Default()
-	/*
-		router.Use(guidMiddleware())
-
-		authorized := router.Group("/")
-		authorized.Use(validateJwt())
-		{
-			authorized.GET("/api", loginEndpoint)
-			authorized.GET("/jwt", submitEndpoint)
-		}
-	*/
-	// Simple group: v1
+	router.Use(guidMiddleware())
 
 	router.GET("/api", validateJwt)
 	router.GET("/jwt", getJwt)
-
-	router.GET("/roles", gin.BasicAuth(gin.Accounts{
-		"admin": "secret",
-	}), func(context *gin.Context) {
-		context.String(http.StatusOK, "Welcome to admin dashboard!")
-	})
-
 	router.GET("/roles", getRoles)
 	router.POST("/roles", postRoles)
 
@@ -99,6 +83,16 @@ func main() {
 
 	fmt.Println("End of File")
 
+}
+
+func guidMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uuid := uuid.New()
+		c.Set("uuid", uuid)
+		fmt.Printf("The request with uuid %s is started \n", uuid)
+		c.Next()
+		fmt.Printf("The request with uuid %s is served \n", uuid)
+	}
 }
 
 func getRoles(c *gin.Context) {
@@ -220,6 +214,7 @@ func validateJwt(c *gin.Context) {
 			return tokn, nil
 		})
 		if err != nil {
+			fmt.Println(err.Error())
 		}
 		if token.Valid {
 			fmt.Println(token)
