@@ -2,15 +2,17 @@ package main
 
 import (
 	"database/sql"
-	"example/web-service-gin/docs"
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+var tokn = []byte("tokenvalue")
+var apikey = "1234"
 
 type role struct {
 	ID   string `json:"id"`
@@ -66,27 +68,15 @@ func main() {
 		}
 		defer insert.Close()
 
-		r := gin.Default()
-		docs.SwaggerInfo.BasePath = "/api/v1"
-		v1 := r.Group("/api/v1")
-		{
-			eg := v1.Group("/example")
-			{
-				eg.GET("/helloworld", getRoles)
-			}
-		}
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-		r.Run(":8080")
-
 	}
 
+	http.Handle("/api", validateJwt(Home))
+	http.HandleFunc("/jwt", getJwt)
+	//http.HandleFunc("/get", getRoles)
+	//http.HandleFunc("/post", postRoles)
+	http.ListenAndServe(":8080", nil)
+
 	//Routes para os pedidos HTTP
-	router := gin.Default()
-
-	router.GET("/roles", getRoles)
-	router.POST("/roles", postRoles)
-
-	router.Run("localhost:8080")
 
 	fmt.Println("End of File")
 
@@ -169,4 +159,77 @@ func postRoles(c *gin.Context) {
 	// Adiciona o novo role á lista neste ficheiro
 	roles = append(roles, newRole)
 	c.IndentedJSON(http.StatusCreated, newRole)
+}
+
+func Home(w http.ResponseWriter, r *http.Request) {
+	router := gin.Default()
+
+	router.GET("/roles", getRoles)
+	router.POST("/roles", postRoles)
+
+	router.Run("localhost:8081")
+
+}
+
+func getJwt(w http.ResponseWriter, r *http.Request) {
+	if r.Header["Access"] != nil {
+		if r.Header["Access"][0] != apikey {
+			return
+
+		} else {
+			token, err := createJwt()
+			if err != nil {
+				return
+			}
+			fmt.Fprint(w, token)
+
+		}
+	}
+}
+
+func createJwt() (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	claims["exp"] = time.Now().Add(time.Hour).Unix()
+
+	tokenStr, err := token.SignedString(tokn)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", err
+	}
+
+	return tokenStr, nil
+}
+
+func validateJwt(next func(w http.ResponseWriter, r *http.Request)) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		if r.Header["Token"] != nil {
+			token, err := jwt.Parse(r.Header["Token"][0], func(t *jwt.Token) (interface{}, error) {
+				_, ok := t.Method.(*jwt.SigningMethodHMAC)
+				if !ok {
+					w.WriteHeader(http.StatusUnauthorized)
+					w.Write([]byte("Not Authorized"))
+				}
+				return tokn, nil
+			})
+
+			if err != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("Not Authorized" + err.Error()))
+
+			}
+
+			if token.Valid {
+				next(w, r)
+			}
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Not Authorized"))
+		}
+	})
+
 }
