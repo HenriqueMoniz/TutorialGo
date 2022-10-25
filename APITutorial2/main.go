@@ -14,6 +14,7 @@ import (
 
 var tokn = []byte("tokenvalue")
 var apikey = "1234"
+var x = false
 
 type role struct {
 	ID   string `json:"id"`
@@ -92,86 +93,94 @@ func guidMiddleware() gin.HandlerFunc {
 		fmt.Printf("The request with uuid %s is started \n", uuid)
 		c.Next()
 		fmt.Printf("The request with uuid %s is served \n", uuid)
+		x = false
 	}
 }
 
 func getRoles(c *gin.Context) {
+	validateJwt(c)
+	if x {
 
-	c.IndentedJSON(http.StatusOK, roles)
-	//abre base de dados
-	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
+		c.IndentedJSON(http.StatusOK, roles)
+		//abre base de dados
+		db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
 
-	//Verifica que não ocorreram erros
-	if err != nil {
-		panic(err.Error())
-	}
-
-	//Adia o fecho da base de dades até a função terminar
-	defer db.Close()
-
-	//Vai buscar todas as linhas da tabela
-	results, err := db.Query("SELECT * FROM test")
-
-	//Verifica se existem erros
-	if err != nil {
-		panic(err.Error())
-	}
-
-	//Vai linha a linha na tabela sql e dá print de cada uma
-	for results.Next() {
-		var test role
-		err = results.Scan(&test.ID, &test.Name, &test.Role)
-
-		//Verifica novamente se tem algum erro
+		//Verifica que não ocorreram erros
 		if err != nil {
 			panic(err.Error())
 		}
 
-		fmt.Println(test.ID, test.Name, test.Role)
-	}
+		//Adia o fecho da base de dades até a função terminar
+		defer db.Close()
 
-	defer results.Close()
+		//Vai buscar todas as linhas da tabela
+		results, err := db.Query("SELECT * FROM test")
+
+		//Verifica se existem erros
+		if err != nil {
+			panic(err.Error())
+		}
+
+		//Vai linha a linha na tabela sql e dá print de cada uma
+		for results.Next() {
+			var test role
+			err = results.Scan(&test.ID, &test.Name, &test.Role)
+
+			//Verifica novamente se tem algum erro
+			if err != nil {
+				panic(err.Error())
+			}
+
+			fmt.Println(test.ID, test.Name, test.Role)
+		}
+
+		defer results.Close()
+	}
 }
 
 // postRoles adiciona um certo json aos roles
 func postRoles(c *gin.Context) {
-	var newRole role
+	validateJwt(c)
+	if x {
 
-	if err := c.BindJSON(&newRole); err != nil {
-		return
+		var newRole role
+
+		if err := c.BindJSON(&newRole); err != nil {
+			return
+		}
+
+		/*fmt.Println("IN POST BEFORE JSON PRINT")
+		/*fmt.Println(newRole.ID)
+		fmt.Println(newRole.Name)
+		fmt.Println(newRole.Role)
+		fmt.Println("IN POST AFTER JSONPRINT")*/
+
+		//Abre a base de dados
+		db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
+
+		//Verifica erros
+		if err != nil {
+			panic(err.Error())
+		}
+
+		//Adia o fecho até terminar a função
+		defer db.Close()
+
+		//Insere os valores do post na base de dados
+		insert, err := db.Query("INSERT INTO test VALUES ( '" + newRole.ID + "','" + newRole.Name + "','" + newRole.Role + "')")
+
+		//Verifica se existem erros
+		if err != nil {
+			panic(err.Error())
+		}
+
+		//Adia o fecho até o fim da função
+		defer insert.Close()
+
+		// Adiciona o novo role á lista neste ficheiro
+		roles = append(roles, newRole)
+		c.IndentedJSON(http.StatusCreated, newRole)
 	}
-
-	/*fmt.Println("IN POST BEFORE JSON PRINT")
-	/*fmt.Println(newRole.ID)
-	fmt.Println(newRole.Name)
-	fmt.Println(newRole.Role)
-	fmt.Println("IN POST AFTER JSONPRINT")*/
-
-	//Abre a base de dados
-	db, err := sql.Open("mysql", "root:drspeed7@tcp(127.0.0.1:3306)/testschema")
-
-	//Verifica erros
-	if err != nil {
-		panic(err.Error())
-	}
-
-	//Adia o fecho até terminar a função
-	defer db.Close()
-
-	//Insere os valores do post na base de dados
-	insert, err := db.Query("INSERT INTO test VALUES ( '" + newRole.ID + "','" + newRole.Name + "','" + newRole.Role + "')")
-
-	//Verifica se existem erros
-	if err != nil {
-		panic(err.Error())
-	}
-
-	//Adia o fecho até o fim da função
-	defer insert.Close()
-
-	// Adiciona o novo role á lista neste ficheiro
-	roles = append(roles, newRole)
-	c.IndentedJSON(http.StatusCreated, newRole)
 }
 
 func getJwt(c *gin.Context) {
@@ -218,7 +227,8 @@ func validateJwt(c *gin.Context) {
 		}
 		if token.Valid {
 			fmt.Println(token)
+			x = true
 		}
-	}
 
+	}
 }
