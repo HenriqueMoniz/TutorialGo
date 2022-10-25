@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-numbers=("1" "5" "8" "2" "9" "4" "5" "0" "3" "6")
+numbers=(1 5 8 2 9 4 5 0 3 6)
 out=()
 echo "array inicial não ordenado"
 echo ${numbers[*]}
@@ -17,7 +17,7 @@ for i in "${numbers[@]}"
             #echo "infirstif"
             #echo $min
             #echo ${out[*]}
-            if [[  " ${out[*]} " == *"$j"*  ]]
+            if [[  " ${out[*]} " == *$j*  ]]
                 then
                 a=1
             else
