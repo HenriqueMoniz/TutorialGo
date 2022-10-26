@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/node": "^18.11.6"
+  },
+  "dependencies": {
+    "number-converter": "^1.2.1"
+  }
+}
