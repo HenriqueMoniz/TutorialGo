@@ -4,6 +4,8 @@ require("number-converter");
 let nome = "Henrique";
 let numero = 123;
 let isTrue = true;
+let numeroEspecifico;
+numeroEspecifico = 50;
 console.log(nome);
 console.log(numero);
 console.log(isTrue);

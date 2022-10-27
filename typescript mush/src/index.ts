@@ -5,6 +5,10 @@ let nome: string ="Henrique";
 let numero: number =123;
 let isTrue: boolean = true;
 
+//apenas pode ser os valores indicados
+let numeroEspecifico:50|100;
+numeroEspecifico = 50;
+
 console.log(nome);
 console.log(numero);
 console.log(isTrue);
