@@ -3,6 +3,8 @@
     "@types/node": "^18.11.6"
   },
   "dependencies": {
-    "number-converter": "^1.2.1"
+    "number-converter": "^1.2.1",
+    "random": "^3.0.6",
+    "readline-sync": "^1.4.10"
   }
 }
