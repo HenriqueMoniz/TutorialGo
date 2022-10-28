@@ -8,7 +8,11 @@ const promise = new Promise((resolve, reject) => {
     }
 
     reject("Não quero")
-
+/**
+ * 
+ * 
+ * 
+ */
 }
 );
 
