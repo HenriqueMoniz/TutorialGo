@@ -1,5 +1,17 @@
 import random from "random"
 
+
+/**
+ * Este ficheiro foi criado para explorar as possibilidades da herança de typescript.
+ * Neste caso temos a super class Animal e a child class tigre que extende a primeira
+ * A classe animal tem vários atributos, nomeadamente nome, alimentação, vivo e energia
+ * this.nome : string. O nome do animal
+ * this.alimentação: string array. Uma lista que contém todos os alimentos do animal
+ * this.vivo:bool que irá dizer se o animal está vivo ou morto
+ * this.energia:number. Quantidade de energia que o animal tem atualmente, esta diminui quando o animal tenta procurar algo para comer e aumenta quando dorme
+ * 
+ * inserir métodos aqui
+ */
 export class Animal {
     nome: string;
     alimentacao: string[];
