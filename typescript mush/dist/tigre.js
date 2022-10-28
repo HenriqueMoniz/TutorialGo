@@ -42,4 +42,3 @@ while (tigre.vivo) {
             tigre.vivo = false;
     }
 }
-//# sourceMappingURL=tigre.js.map

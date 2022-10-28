@@ -40,4 +40,3 @@ function kgparapounds(weight) {
         return parseInt(weight) * 2.2;
 }
 console.log(kgparapounds("22kg"));
-//# sourceMappingURL=index.js.map

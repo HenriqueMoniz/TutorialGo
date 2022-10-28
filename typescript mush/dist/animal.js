@@ -58,4 +58,3 @@ class Animal {
 }
 exports.Animal = Animal;
 var animal = new Animal("Crocodilo", ["Zebra", "Gazela", "Carpa", "Galinha"]);
-//# sourceMappingURL=animal.js.map
