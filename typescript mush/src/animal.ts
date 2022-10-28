@@ -55,6 +55,7 @@ export class Animal {
             count += 1;
             if (count * 10 > this.energia) {
                 this.vivo = false;
+                // energia
                 return "O animal esgotou todas as suas energias e acabou por morrer"
             }
             else if (random.int(0, 100) < percentagemSucesso * 100) {
@@ -63,7 +64,7 @@ export class Animal {
                 return "O animal comeu um " + comido + " após " + count + " tentativas. \nGastou " + count * 10 + " pontos de energia. \nSobreviveu mais um dia."
             }
         }
-
+        this.energia -= count * 10
         return "O animal não conseguiu encontrar nada para comer e acabou por perder " + count * 10 + " pontos de energia"
 
     }

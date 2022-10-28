@@ -53,6 +53,7 @@ class Animal {
                 return "O animal comeu um " + comido + " após " + count + " tentativas. \nGastou " + count * 10 + " pontos de energia. \nSobreviveu mais um dia.";
             }
         }
+        this.energia -= count * 10;
         return "O animal não conseguiu encontrar nada para comer e acabou por perder " + count * 10 + " pontos de energia";
     }
 }
