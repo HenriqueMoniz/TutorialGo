@@ -1,5 +1,0 @@
-Criados os dois folders test a partir do bash com mkdir "nome"
-Criados os ficheiros com touch "nome"
-Mover com mv "directório ficheiro 1" , "diretório desejado"
-Copiar com cp ^
-Ver ficheiro com nano "nome", aqui é possivel adicionar coisas.
