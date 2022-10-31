@@ -21,6 +21,12 @@ class App {
         //message: nc.convert(1234)
       })
     })
+
+    router.get('/con', (req, res) => {
+      res.json({
+        message:this.nc.convert(1234)
+      })
+    })
     this.express.use('/', router)
   }
 }
