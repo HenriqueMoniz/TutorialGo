@@ -10,7 +10,7 @@ class App {
     this.express = express()
     this.mountRoutes()
     var NumberConverter = numbcon.NumberConverter;
-    var nc = new NumberConverter(NumberConverter.DECIMAL, NumberConverter.ROMAN_NUMERAL);
+    this.nc = new NumberConverter(NumberConverter.DECIMAL, NumberConverter.ROMAN_NUMERAL);
   }
 
   private mountRoutes (): void {
