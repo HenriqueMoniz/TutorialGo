@@ -1,3 +1,7 @@
+/**
+ * Este ficheiro foi apenas para treinar e testar as bases de typescript.
+ */
+
 import "number-converter"
 
 //variáveis simples

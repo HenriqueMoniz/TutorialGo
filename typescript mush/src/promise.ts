@@ -1,4 +1,6 @@
-
+/**
+ * Ficheiro que contém as bases das promessas de typescript
+ */
 
 var testInt: number = 10;
 
@@ -8,11 +10,6 @@ const promise = new Promise((resolve, reject) => {
     }
 
     reject("Não quero")
-/**
- * 
- * 
- * 
- */
 }
 );
 
