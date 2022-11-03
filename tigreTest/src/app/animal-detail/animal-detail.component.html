@@ -1,0 +1,15 @@
+<div *ngIf="animal">
+    <h2>Informações de {{animal.name | uppercase}}</h2>
+    <div>Id: {{animal.id}}</div>
+
+    <div>
+      <label for="animal-name">Animal name: </label>
+      <input id="animal-name" [(ngModel)]="animal.name" placeholder="name">
+      <div>Espécie: {{animal.especie}}</div>
+      <div>Alimentação: {{animal.alimentacao}}</div>
+      <div>Energia: {{animal.energia}}</div>
+      <div>Está vivo: {{animal.vivo}}</div>
+    </div>
+    <button type="button" (click)="goBack()">go back</button>
+  </div>
+
