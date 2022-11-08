@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnimalService } from '../animal.service';
 import { Animal } from '../animal';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,9 +10,12 @@ import { Animal } from '../animal';
 })
 export class DashboardComponent implements OnInit {
   animals: Animal[] = [];
-  constructor(private animalService: AnimalService) { }
+  constructor(private animalService: AnimalService) { 
+    this.getAnimals()
+  }
 
   ngOnInit(): void {
+    
   }
 
   getAnimals(): void {

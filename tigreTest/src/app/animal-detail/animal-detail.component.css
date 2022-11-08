@@ -8,11 +8,11 @@ label {
     padding: .5rem;
   }
   button {
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #eee;
-    padding: 1rem;
+    padding: 10px;
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 0.7rem;
   }
   button:hover {
     background-color: #cfd8dc;

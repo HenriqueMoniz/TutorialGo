@@ -1,5 +1,5 @@
 <div *ngIf="animal">
-    <h2>Informações de {{animal.name | uppercase}}</h2>
+    <h2 >{{"Informações de"|altupper}} {{animal.name|altupper}}</h2>
     <div>Id: {{animal.id}}</div>
 
     <div>
@@ -8,8 +8,21 @@
       <div>Espécie: {{animal.especie}}</div>
       <div>Alimentação: {{animal.alimentacao}}</div>
       <div>Energia: {{animal.energia}}</div>
-      <div>Está vivo: {{animal.vivo}}</div>
+      <div id="change">Está vivo: {{animal.vivo}}</div>
+
+
     </div>
+    <div>
+      <label for="animal-sleep">Dormir e recuperar 50 energia: </label>
+      <button type="button" (click)="dormir()">Dormir</button>
+      </div>
+    <div>
+    <label for="animal-eat">Buscar comida: </label>
+    <input id="tentativas" placeholder=0>
+    <button type="button" (click)="tentarComer()">Tentar</button>
+    </div>
+
     <button type="button" (click)="goBack()">go back</button>
   </div>
 
+  <app-messages></app-messages>

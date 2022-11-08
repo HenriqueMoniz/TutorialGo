@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Animal } from '../animal';
 import { AnimalService } from '../animal.service';
-
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-animal',
@@ -14,9 +14,11 @@ export class AnimalComponent implements OnInit {
   animals:Animal[]=[];
 
   
-  constructor(private animalService: AnimalService) { }
-  ngOnInit(): void {
+  constructor(private animalService: AnimalService) { 
     this.getAnimals();
+  }
+  ngOnInit(): void {
+    
   }
   
 

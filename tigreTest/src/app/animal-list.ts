@@ -11,8 +11,8 @@ export const ANIMALS: Animal[] = [
   },
   {
     id:2,
-    name: 'Zebra',
-    especie: 'Zebra Comum',
+    name: 'Elefante',
+    especie: 'Elefante cinzento',
     alimentacao: ["Erva", "Arbustos"],
     energia: 100,
     vivo: true

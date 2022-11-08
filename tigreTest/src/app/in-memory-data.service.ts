@@ -18,8 +18,8 @@ export class InMemoryDataService implements InMemoryDbService {
       },
       {
         id:2,
-        name: 'Zebra',
-        especie: 'Zebra Comum',
+        name: 'Elefante',
+        especie: 'Elefante Cinzento',
         alimentacao: ["Erva", "Arbustos"],
         energia: 100,
         vivo: true

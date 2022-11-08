@@ -11,6 +11,9 @@ import { AnimalComponent } from './animal/animal.component';
 import { AnimalDetailComponent } from './animal-detail/animal-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { animalSearchComponent } from './animal-search/animal-search.component';
+import { altupper } from './upperlower.pipe';
+import { MessagesComponent } from './messages/messages.component';
+
 
 @NgModule({
   declarations: [
@@ -19,6 +22,8 @@ import { animalSearchComponent } from './animal-search/animal-search.component';
     AnimalDetailComponent,
     DashboardComponent,
     animalSearchComponent,
+    altupper,
+    MessagesComponent
     
   ],
   imports: [

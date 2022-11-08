@@ -4,7 +4,7 @@ import { ANIMALS } from './animal-list';
 import { Observable, of } from 'rxjs';
 import { catchError, tap,map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import {RouterModule} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
